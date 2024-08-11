@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timer_app/src/features/stopwatch/presentation/stopwatch_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -31,7 +32,7 @@ class MainApp extends StatelessWidget {
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: StopWatchScreen(),
+      home: const StopwatchScreen(),
     );
   }
 }
