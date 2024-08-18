@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class StopwatchScreen extends StatefulWidget {
   const StopwatchScreen({super.key});
@@ -16,9 +17,13 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
   // Ein Funktion dass wir die Sekunden hoch zu zählen
   // Set State Functionen damit sich das UI updated
   // Future & Async Function um auf die Zeit warten
+  // Die Buttons wurden optimiert
+  // Zeitstempel erfassen, wenn der Benutzer auf Record-Taste drückt.
 
   int showSeconds = 0;
   bool running = false;
+  bool stopped = false;
+  List<String> records = [];
 
   runTime() async {
     while (running) {
@@ -30,7 +35,6 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
   }
 
   startWatch() {
-    // Kannst den Funktion nur aus führen wenn der Start Button nicht gedrückt ist.
     if (!running) {
       running = true;
       runTime();
@@ -39,11 +43,19 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
 
   stopWatch() {
     running = false;
+    stopped = true;
   }
 
   resetWatch() {
     running = false;
+    stopped = false;
     showSeconds = 0;
+    records.clear();
+    setState(() {});
+  }
+
+  addRecord() {
+    records.add("${records.length + 1}. Record: ${showSeconds / 1000} s");
     setState(() {});
   }
 
@@ -53,32 +65,58 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
       appBar: AppBar(
         title: const Text("Stopwatch"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "${showSeconds / 1000} s",
-              style: const TextStyle(fontSize: 78, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: startWatch,
-                  child: const Text("Start"),
+      body: Padding(
+        padding:
+            const EdgeInsets.only(left: 30, right: 30, top: 100, bottom: 50),
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(
+                width: 300,
+                child: Text(
+                  "${showSeconds / 1000}",
+                  style: GoogleFonts.robotoMono(
+                    fontSize: 78,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                ElevatedButton(
-                  onPressed: stopWatch,
-                  child: const Text("Stop"),
+              ),
+              const SizedBox(height: 100),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed:
+                        running ? addRecord : (stopped ? resetWatch : null),
+                    child: Text(
+                        running ? "Record" : (stopped ? "Reset" : "Record")),
+                  ),
+                  ElevatedButton(
+                    onPressed: running
+                        ? stopWatch
+                        : (stopped ? startWatch : startWatch),
+                    child: Text(
+                        running ? "Stop" : (stopped ? "Continue" : "Start")),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              const Divider(),
+              const SizedBox(height: 10),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: records.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Text(records[index]),
+                    );
+                  },
                 ),
-                ElevatedButton(
-                  onPressed: resetWatch,
-                  child: const Text("Reset"),
-                ),
-              ],
-            )
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
