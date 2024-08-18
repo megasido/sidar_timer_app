@@ -9,22 +9,18 @@ class StopwatchScreen extends StatefulWidget {
 }
 
 class _StopwatchScreenState extends State<StopwatchScreen> {
-  // 15 s, spricht die Sekunden müssen variable werden
-  // Buttons brauchen Funktionen
-  // Reset Button: Alle Variablen zurücksetzen
-  // Start Button: Stopwatch starten
-  // Stop Button: Stopwatch stoppen
-  // Ein Funktion dass wir die Sekunden hoch zu zählen
-  // Set State Functionen damit sich das UI updated
-  // Future & Async Function um auf die Zeit warten
-  // Die Buttons wurden optimiert
-  // Zeitstempel erfassen, wenn der Benutzer auf Record-Taste drückt.
+  // Es gibt ein paar wichtige Variablen im Code:
 
   int showSeconds = 0;
   bool running = false;
   bool stopped = false;
   List<String> records = [];
 
+// Buttons brauchen Funktionen
+
+  // Ein Funktion dass wir die Sekunden hoch zu zählen
+  // Set State Functionen damit sich das UI updated
+  // Future & Async Function um auf die Zeit warten
   runTime() async {
     while (running) {
       await Future.delayed(const Duration(milliseconds: 100));
@@ -34,6 +30,7 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
     }
   }
 
+// Start Button: Stopwatch starten
   startWatch() {
     if (!running) {
       running = true;
@@ -41,11 +38,13 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
     }
   }
 
+// Stop Button: Stopwatch stoppen
   stopWatch() {
     running = false;
     stopped = true;
   }
 
+// Reset Button: Alle Variablen zurücksetzen
   resetWatch() {
     running = false;
     stopped = false;
@@ -54,6 +53,7 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
     setState(() {});
   }
 
+// Zeitstempel erfassen, wenn der Benutzer auf Record-Taste drückt.
   addRecord() {
     records.add("${records.length + 1}. Record: ${showSeconds / 1000} s");
     setState(() {});
