@@ -16,7 +16,7 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
   bool isStopped = false;
   List<String> records = [];
 
-// Buttons brauchen Funktionen
+// Buttons brauchen Funktionen.
 
   // Ein Funktion dass wir die Sekunden hoch zu zählen
   // Set State Functionen damit sich das UI updated
