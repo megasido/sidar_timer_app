@@ -11,9 +11,9 @@ class StopwatchScreen extends StatefulWidget {
 class _StopwatchScreenState extends State<StopwatchScreen> {
   // Es gibt ein paar wichtige Variablen im Code:
 
-  int showSeconds = 0;
-  bool running = false;
-  bool stopped = false;
+  int showMilliseconds = 0;
+  bool isRunning = false;
+  bool isStopped = false;
   List<String> records = [];
 
 // Buttons brauchen Funktionen
@@ -22,40 +22,40 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
   // Set State Functionen damit sich das UI updated
   // Future & Async Function um auf die Zeit warten
   runTime() async {
-    while (running) {
+    while (isRunning) {
       await Future.delayed(const Duration(milliseconds: 100));
       setState(() {
-        showSeconds = showSeconds + 100;
+        showMilliseconds = showMilliseconds + 100;
       });
     }
   }
 
 // Start Button: Stopwatch starten
   startWatch() {
-    if (!running) {
-      running = true;
+    if (!isRunning) {
+      isRunning = true;
       runTime();
     }
   }
 
 // Stop Button: Stopwatch stoppen
   stopWatch() {
-    running = false;
-    stopped = true;
+    isRunning = false;
+    isStopped = true;
   }
 
 // Reset Button: Alle Variablen zurücksetzen
   resetWatch() {
-    running = false;
-    stopped = false;
-    showSeconds = 0;
+    isRunning = false;
+    isStopped = false;
+    showMilliseconds = 0;
     records.clear();
     setState(() {});
   }
 
 // Zeitstempel erfassen, wenn der Benutzer auf Record-Taste drückt.
   addRecord() {
-    records.add("${records.length + 1}. Record: ${showSeconds / 1000} s");
+    records.add("${records.length + 1}. Record: ${showMilliseconds / 1000} s");
     setState(() {});
   }
 
@@ -74,7 +74,7 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
               SizedBox(
                 width: 300,
                 child: Text(
-                  "${showSeconds / 1000}",
+                  "${showMilliseconds / 1000}",
                   style: GoogleFonts.robotoMono(
                     fontSize: 78,
                     fontWeight: FontWeight.bold,
@@ -88,16 +88,18 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
                 children: [
                   ElevatedButton(
                     onPressed:
-                        running ? addRecord : (stopped ? resetWatch : null),
-                    child: Text(
-                        running ? "Record" : (stopped ? "Reset" : "Record")),
+                        isRunning ? addRecord : (isStopped ? resetWatch : null),
+                    child: Text(isRunning
+                        ? "Record"
+                        : (isStopped ? "Reset" : "Record")),
                   ),
                   ElevatedButton(
-                    onPressed: running
+                    onPressed: isRunning
                         ? stopWatch
-                        : (stopped ? startWatch : startWatch),
-                    child: Text(
-                        running ? "Stop" : (stopped ? "Continue" : "Start")),
+                        : (isStopped ? startWatch : startWatch),
+                    child: Text(isRunning
+                        ? "Stop"
+                        : (isStopped ? "Continue" : "Start")),
                   ),
                 ],
               ),
